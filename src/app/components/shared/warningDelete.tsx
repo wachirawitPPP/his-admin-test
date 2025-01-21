@@ -1,6 +1,8 @@
 import React from "react";
 import warningImg from "../../../../public/images/animation_warning_delete.json";
-import { useLottie } from "lottie-react";
+
+import dynamic from "next/dynamic";
+const {useLottie} = dynamic(() => import("lottie-react"), { ssr: false });
 
 export default function WarningDeleteComponent() {
   const options = {
