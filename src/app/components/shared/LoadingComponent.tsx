@@ -1,7 +1,8 @@
 import React from "react";
 import loadingImg from "../../../../public/images/loading.json";
 import dynamic from "next/dynamic";
-const {useLottie} = dynamic(() => import("lottie-react"), { ssr: false });
+const useLottie = dynamic(() => import("lottie-react").then((mod) => mod.useLottie), { ssr: false });
+
 
 export default function LoadingComponent() {
   const options = {
