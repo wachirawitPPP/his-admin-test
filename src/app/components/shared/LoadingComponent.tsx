@@ -1,8 +1,7 @@
 import React from "react";
 import loadingImg from "../../../../public/images/loading.json";
 import dynamic from "next/dynamic";
-const useLottie = dynamic(() => import("lottie-react").then((mod) => mod.useLottie), { ssr: false });
-
+const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
 
 export default function LoadingComponent() {
   const options = {
@@ -11,7 +10,7 @@ export default function LoadingComponent() {
     autoplay: true,
   };
 
-  const { View } = useLottie(options, { width: "300px", height: "300px" });
+  const { View } = Lottie(options, { width: "300px", height: "300px" });
   return (
     <div className="flex flex-col items-center" style={{ padding: "20px" }}>
       {View}
