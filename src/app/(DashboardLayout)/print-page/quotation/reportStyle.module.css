@@ -1,0 +1,63 @@
+.header01 {
+  color: rgb(108, 109, 242);
+  font-size: 24px;
+  font-weight: bold;
+  font-family: "NotoSansThaiRedular";
+}
+
+.cardItem {
+  background-color: rgba(108, 109, 242, 0.165);
+  border-radius: 4px;
+  width: 100%;
+  padding: 6px;
+}
+
+.bottomLine {
+  padding-bottom: 4px;
+  padding-top: 4px;
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  border-bottom: 1px solid rgb(229 231 235);
+}
+.DRborderBottom {
+  width: 100%;
+  height: 68px;
+  padding: 8px;
+  border-bottom: 1px solid rgb(229 231 235);
+}
+
+.borderBottom {
+  width: 100%;
+  border-bottom: 1px solid rgb(229 231 235);
+}
+
+.cardNormal {
+  padding-bottom: 4px;
+  padding-top: 4px;
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+}
+
+.textNormalRight {
+  display: flex;
+  justify-content: end;
+  font-family: "NotoSansThaiRedular";
+  color: rgb(51 65 85);
+  font-size: 10px;
+}
+
+.flexColEnd {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.sigBox {
+  height: 128px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}

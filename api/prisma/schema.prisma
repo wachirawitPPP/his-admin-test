@@ -1,0 +1,98 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Access_Roles {
+  access_role_id   Int           @id @default(autoincrement())
+  access_role_name String        @db.VarChar(50)
+  User_Access      User_Access[]
+}
+
+model Applications {
+  app_id           Int                @id @default(autoincrement())
+  app_name         String             @db.VarChar(50)
+  Shop_Application Shop_Application[]
+}
+
+model Menu_Access {
+  role_id Int
+  menu_id Int
+  Roles   Roles @relation(fields: [role_id], references: [role_id], onDelete: Cascade, onUpdate: NoAction, map: "Menu_Access_ibfk_1")
+  Menus   Menus @relation(fields: [menu_id], references: [menu_id], onDelete: Cascade, onUpdate: NoAction, map: "Menu_Access_ibfk_2")
+
+  @@id([role_id, menu_id])
+  @@index([menu_id], map: "menu_id")
+}
+
+model Menus {
+  menu_id     Int           @id @default(autoincrement())
+  menu_name   String        @db.VarChar(50)
+  Menu_Access Menu_Access[]
+  Shop_Menu   Shop_Menu[]
+}
+
+model Roles {
+  role_id     Int           @id @default(autoincrement())
+  role_name   String        @db.VarChar(50)
+  Menu_Access Menu_Access[]
+  User_Roles  User_Roles[]
+}
+
+model Shop_Application {
+  shop_id      Int
+  app_id       Int
+  Shops        Shops        @relation(fields: [shop_id], references: [shop_id], onDelete: Cascade, onUpdate: NoAction, map: "Shop_Application_ibfk_1")
+  Applications Applications @relation(fields: [app_id], references: [app_id], onDelete: Cascade, onUpdate: NoAction, map: "Shop_Application_ibfk_2")
+
+  @@id([shop_id, app_id])
+  @@index([app_id], map: "app_id")
+}
+
+model Shop_Menu {
+  shop_id Int
+  menu_id Int
+  Shops   Shops @relation(fields: [shop_id], references: [shop_id], onDelete: Cascade, onUpdate: NoAction, map: "Shop_Menu_ibfk_1")
+  Menus   Menus @relation(fields: [menu_id], references: [menu_id], onDelete: Cascade, onUpdate: NoAction, map: "Shop_Menu_ibfk_2")
+
+  @@id([shop_id, menu_id])
+  @@index([menu_id], map: "menu_id")
+}
+
+model Shops {
+  shop_id          Int                @id @default(autoincrement())
+  shop_name        String             @db.VarChar(50)
+  Shop_Application Shop_Application[]
+  Shop_Menu        Shop_Menu[]
+}
+
+model User_Access {
+  user_id        Int
+  access_role_id Int
+  Users          Users        @relation(fields: [user_id], references: [user_id], onDelete: Cascade, onUpdate: NoAction, map: "User_Access_ibfk_1")
+  Access_Roles   Access_Roles @relation(fields: [access_role_id], references: [access_role_id], onDelete: Cascade, onUpdate: NoAction, map: "User_Access_ibfk_2")
+
+  @@id([user_id, access_role_id])
+  @@index([access_role_id], map: "access_role_id")
+}
+
+model User_Roles {
+  user_id Int
+  role_id Int
+  Users   Users @relation(fields: [user_id], references: [user_id], onDelete: Cascade, onUpdate: NoAction, map: "User_Roles_ibfk_1")
+  Roles   Roles @relation(fields: [role_id], references: [role_id], onDelete: Cascade, onUpdate: NoAction, map: "User_Roles_ibfk_2")
+
+  @@id([user_id, role_id])
+  @@index([role_id], map: "role_id")
+}
+
+model Users {
+  user_id     Int           @id @default(autoincrement())
+  username    String        @db.VarChar(50)
+  User_Access User_Access[]
+  User_Roles  User_Roles[]
+}

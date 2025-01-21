@@ -1,0 +1,109 @@
+:root{
+    --color-info:#46caeb;
+    --color-success:#00ceb6;
+    --color-warning:#FFB900;
+    --color-error:#FF6692;
+    --color-lightsuccess:#00ceb620;
+    --color-lighterror:#FF669220;
+    --color-lightinfo:#46caeb20;
+    --color-lightwarning:#FFB90020;
+    --color-white:#fff ;
+	--color-dark:#111c2d;
+    --color-border:#e0e6eb;
+    --color-bordergray:#cfd6db;
+    --color-darkborder:#333F55;
+    --color-link:#2a3547;
+    --color-muted:#EFF4FA;
+    --color-darkmuted:#2A3851;
+    --color-darklink:#7b8893;
+    --color-lightgray:#F8FAFD;
+    --color-lighthover:#F6F9FC;
+    --color-darkgray:#1A2537;
+    --color-error-emphasis:#d5745b;
+    --color-warning-emphasis:#d9941a;
+    --color-success-emphasis:#10bd9d;
+    --color-surface-ld:#ffffff;
+}
+
+[data-color-theme="BLUE_THEME"]{
+    --color-primary: #00A1FF;
+    --color-secondary: #ac90f1;
+    --color-primary-emphasis:#0091E5;   
+    --color-secondary-emphasis:#673ADE;
+    --color-lightprimary:#00A1FF20;
+    --color-lightsecondary:#8965E520; 
+    --color-error:#FF6692;
+    --color-lighterror:#FF669220;
+    --color-error-emphasis:#d5745b;
+}
+[data-color-theme="AQUA_THEME"]{
+    --color-primary: #0074BA;
+    --color-bghover:#00639e ; 
+    --color-primary-emphasis:#00639e;   
+    --color-secondary-emphasis:#3cb7a0;
+    --color-secondary: #76e9d4;
+    --color-lightprimary:#0074BA20;
+    --color-lightsecondary:#00639e20;
+}
+[data-color-theme="PURPLE_THEME"]{
+    --color-primary: #763EBD;
+    --color-primary-emphasis:#6435a1;   
+    --color-secondary-emphasis:#7fb0b5;
+    --color-secondary: #8dcff3;
+    --color-lightprimary:#763EBD20;
+    --color-lightsecondary:#49BEFF20;
+}
+[data-color-theme="GREEN_THEME"]{
+    --color-primary: #0A7EA4;
+    --color-primary-emphasis:#096b8b;   
+    --color-secondary-emphasis:#d4e069;
+    --color-secondary: #e2ec85;
+    --color-lightprimary:#0A7EA420;
+    --color-lightsecondary:#CCDA4E20;
+}
+[data-color-theme="CYAN_THEME"]{
+    --color-primary: #01C0C8;
+    --color-primary-emphasis:#01a3aa;   
+    --color-secondary-emphasis:#d58066;
+    --color-secondary: #f8b8a4;
+    --color-lightprimary:#01C0C820;
+    --color-lightsecondary:#FB967820;
+    --color-lightsuccess:#00ceb620;
+    
+}
+[data-color-theme="ORANGE_THEME"]{
+    --color-primary: #FA896B;
+    --color-primary-emphasis:#d5745b;   
+    --color-secondary-emphasis:#00639e;
+    --color-secondary: #8fc6e9;
+    --color-lightprimary:#FA896B20;
+    --color-lightsecondary:#0074BA20;
+}
+
+[data-color-theme="PINK_THEME"]{
+    --color-primary: #EB42AF;
+    --color-primary-emphasis:#d13de8;   
+    --color-secondary-emphasis:#872bd1;
+    --color-secondary: #be7df4;
+    --color-lightprimary:#f2def6;
+    --color-lightsecondary:#9e0466;
+}
+
+[data-color-theme="ORANGELIGHT_THEME"]{
+    --color-primary:#EBAF42;
+    --color-primary-emphasis:#c38f30;   
+    --color-secondary-emphasis:#EB7942;
+    --color-secondary: #f3b77b;
+    --color-lightprimary:#f7eddb;
+    --color-lightsecondary:#9e3704;
+}
+
+[data-color-theme="YELLOW_THEME"]{
+    --color-primary:#bba735;
+    --color-primary-emphasis:#e8cd35;   
+    --color-secondary-emphasis:#EBA842;
+    --color-secondary: #eed693;
+    --color-lightprimary:#f9f6e4;
+    --color-lightsecondary:#b06b04;
+}
+
