@@ -14,6 +14,7 @@ import {
   Button,
   Label,
   Select,
+  Spinner,
   Table,
   TableBody,
   TableCell,
@@ -41,6 +42,12 @@ import ModalError from "../layout/shared/modal-error/modalError";
 import ModalLoading from "../layout/shared/modal-loading/modalLoading";
 import ModalInformation from "../layout/shared/modal-information/modalInformation";
 import ModalDelete from "../layout/shared/modal-delete/modalDelete";
+import ProgressLine from "../layout/shared/progressLine/progressLine";
+import RushAnimation from "@/app/components/shared/rushAnimation";
+import emptyAnt from "../../../../public/images/animation_empty.json";
+import TablePagination from "@/app/components/shared/TablePagination";
+import UserTabalFilter from "./userTabalFilter";
+import TableData from "./tableData";
 
 export const fileToDataString = (file: File) => {
   return new Promise<string>((resolve, reject) => {
@@ -67,6 +74,7 @@ function UserTable() {
   const [deleteId, setDeleteId] = useState<UserModel>();
   const [editData, setEditData] = useState<UserModel | null>();
   const [userList, setUserList] = useState<UserModel[]>([]);
+  const [progressLoad, setProgressLoad] = useState(false);
   const [userName, setUserName] = useState<{ [key: string]: string }>({
     fname: "",
     lname: "",
@@ -78,7 +86,7 @@ function UserTable() {
 
   const [searnchApps, setSearnchApps] = useState<AppSearnchModel>({
     search_text: "",
-    search_status: 1,
+    search_status: -1,
     page: 1,
     limit: 1000,
   });
@@ -95,9 +103,11 @@ function UserTable() {
     ap_status: 1,
   });
 
-  const { t } = useTranslation();
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalItems, setTotalItems] = useState(0);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
 
-  const { isLanguage } = useContext(CustomizerContext);
+  const { t } = useTranslation();
 
   const closeModal = () => {
     setIsModalOpen(false);
@@ -120,23 +130,6 @@ function UserTable() {
     setActiveTab(0);
     removeFile();
     setEditData(null);
-  };
-
-  const handleFileChange: ChangeEventHandler<HTMLInputElement> = async (
-    event
-  ) => {
-    const file = event.target.files as FileList;
-    setSelectedImage(file?.[0]);
-    if (!file) {
-      return;
-    }
-    try {
-      const imgUrl = await fileToDataString(file?.[0]);
-      formData.ap_logo = file?.[0].name;
-      setPreviewimgUrl(imgUrl);
-    } catch (error) {
-      console.log(error);
-    }
   };
 
   const removeFile = () => {
@@ -171,10 +164,23 @@ function UserTable() {
       default:
         break;
     }
-
-    const accessToken = localStorage.getItem("access_token");
-    apiGetAllUsers(accessToken || "");
   };
+
+  const onPageChange = (page: number) => {
+    setCurrentPage(page);
+    const accessToken = localStorage.getItem("access_token");
+    apiGetAllUsers(accessToken || "", page);
+  };
+
+  const handleItemsPerPageChange = (itemsPerPage: number) => {
+    setItemsPerPage(itemsPerPage);
+    setCurrentPage(1);
+    const accessToken = localStorage.getItem("access_token");
+    apiGetAllUsers(accessToken || "", 1);
+  };
+
+  // Calculate total pages dynamically based on total items and items per page
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
 
   const validateField = (field: string, value: string) => {
     switch (field) {
@@ -247,11 +253,17 @@ function UserTable() {
     return "";
   };
 
-  const apiGetAllUsers = async (access_token: string) => {
+  const apiGetAllUsers = async (access_token: string, page: number) => {
     try {
       if (access_token != "") {
         setIsLoading(true);
-        const payload = searnchApps;
+        setProgressLoad(true);
+        const payload = {
+          search_text: searnchApps.search_text,
+          search_status: searnchApps.search_status,
+          page: page,
+          limit: itemsPerPage,
+        };
         const response = await axios.post(
           `${process.env.NEXT_PUBLIC_API_URL}/user/pagination`,
           payload,
@@ -263,12 +275,14 @@ function UserTable() {
         );
         if (response.data.status == "success") {
           setUserList(response.data.data.items || []);
+          setTotalItems(response.data.data.count_all || 0);
         } else {
           setmessageError({
             isError: true,
             message: response.data.message,
           });
         }
+        setProgressLoad(false);
         setIsLoading(false);
       }
     } catch (error: any) {
@@ -292,7 +306,7 @@ function UserTable() {
         );
         closeModal();
         if (response.data.status == "success") {
-          apiGetAllUsers(access_token);
+          apiGetAllUsers(access_token, currentPage);
         } else {
           setmessageError({
             isError: true,
@@ -322,7 +336,7 @@ function UserTable() {
         );
         if (response.data.status == "success") {
           closeModal();
-          apiGetAllUsers(access_token);
+          apiGetAllUsers(access_token, currentPage);
         } else {
           setIsModalOpen(false);
           setmessageError({
@@ -353,7 +367,7 @@ function UserTable() {
         );
         if (response.data.status == "success") {
           closeModal();
-          apiGetAllUsers(access_token);
+          apiGetAllUsers(access_token, currentPage);
         } else {
           setIsModalOpen(false);
           setmessageError({
@@ -393,169 +407,67 @@ function UserTable() {
 
   useEffect(() => {
     const accessToken = localStorage.getItem("access_token") || "";
-    apiGetAllUsers(accessToken);
+    apiGetAllUsers(accessToken, currentPage);
   }, []);
 
   return (
     <CardBox>
-      <div className="flex flex-row justify-between w-full py-2 gap-4">
-        <div className="w-2/3 flex justify-around">
-          <div className="w-1/2 px-2">
-            <div className="mb-2 pt-2">
-              <Label htmlFor="search_text" value={`${t("User Name")}`} />
-            </div>
-            <TextInput
-              onBlur={handleSearnch}
-              placeholder={`${t("Search")}, ${t("User Name")}, ${t(
-                "Name"
-              )}, ${t("Phone Number")}, ${t("Email")}`}
-              id="search_text"
-              type="text"
-              sizing="md"
-              className={`form-rounded-md text-primary`}
-            />
-          </div>
-          <div className="w-1/2 px-2">
-            <div className="my-2">
-              <Label htmlFor="search_status" value={t("Status")} />
-            </div>
-            <Select
-              id="search_status"
-              onChange={(e) => {
-                searnchApps.search_status = parseInt(e.target.value);
-                const accessToken = localStorage.getItem("access_token");
-                apiGetAllUsers(accessToken || "");
-              }}
-              required
-              className="select-md"
-            >
-              <option value={1}>{t("Active")}</option>
-              <option value={0}>{t("Inactive")}</option>
-            </Select>
-          </div>
-        </div>
-        <div className="mt-8">
-          <Button
-            color={"primary"}
-            onClick={() => {
-              setIsModalOpen(true);
-            }}
-          >
-            {t("Add User")} <IconPlus />
-          </Button>
-        </div>
-      </div>
-      <div className="border rounded-md border-ld overflow-hidden">
-        <div className="overflow-auto h-[calc(70vh_-_85px)] r-4 shadow-md rounded   ">
-          <Table>
-            <TableHead className={`dark:bg-cyan-700`}>
-              <TableHeadCell className="flex justify-center items-center">
-                {t("Number")}
-              </TableHeadCell>
-              <TableHeadCell>{t("User Name")}</TableHeadCell>
-              <TableHeadCell>{t("Name")}</TableHeadCell>
-              <TableHeadCell>{t("ID")}</TableHeadCell>
-              <TableHeadCell>{t("Phone Number")}</TableHeadCell>
-              <TableHeadCell>{t("Email")}</TableHeadCell>
-              <TableHeadCell>{t("Status")}</TableHeadCell>
-              <TableHeadCell className="flex justify-center">
-                Action
-              </TableHeadCell>
-            </TableHead>
-            {userList.length > 0 ? (
-              <>
-                {" "}
-                <TableBody>
-                  {userList.map((item, index) => (
-                    <TableRow
-                      key={item.us_id}
-                      className={`dark:text-white hover:bg-lightprimary hover:text-primary  dark:hover:bg-lightprimary`}
-                    >
-                      <TableCell>
-                        <div className="flex justify-center ">{index + 1}</div>
-                      </TableCell>
-                      <TableCell>{item.us_username}</TableCell>
-                      <TableCell>{item.us_fullname}</TableCell>
-                      <TableCell>{item.us_id}</TableCell>
-                      <TableCell>{item.us_phone}</TableCell>
-                      <TableCell>{item.us_email}</TableCell>
-                      <TableCell>
-                        {item.us_status == 1 ? (
-                          <>
-                            <Badge color="primary">{t("Active")}</Badge>
-                          </>
-                        ) : (
-                          <>
-                            <Badge color="failure">{t("Inactive")}</Badge>
-                          </>
-                        )}
-                      </TableCell>
-                      <TableCell>
-                        {item.us_delete == "" || item.us_delete == null ? (
-                          <>
-                            {" "}
-                            <div className="flex flex-col  items-center justify-center sm:flex-row gap-4 ">
-                              <div className="flex justify-center items-center">
-                                <Tooltip content={t("Edit")} style="dark">
-                                  <IconEdit
-                                    className="cursor-pointer text-primary"
-                                    onClick={() => {
-                                      setEditData(item);
-                                      let us_fname = "";
-                                      let us_lname = "";
-                                      if (item.us_fullname != "") {
-                                        let list = item.us_fullname.split(" ");
-                                        us_fname = list[0];
-                                        us_lname = list[1];
-                                      }
-                                      formData.us_username = item.us_username;
-                                      formData.us_password = item.us_password;
-                                      formData.us_phone = item.us_phone;
-                                      formData.us_fname = us_fname;
-                                      formData.us_lname = us_lname;
-                                      formData.us_email = item.us_email;
-                                      formData.ap_status = item.us_status;
-                                      setUserName({
-                                        fname: us_fname,
-                                        lname: us_lname,
-                                      });
-                                      setIsModalOpen(true);
-                                    }}
-                                  />
-                                </Tooltip>
-                              </div>
-                              <div className="flex justify-center items-center">
-                                <Tooltip content={t("Delete")} style="dark">
-                                  <IconTrash
-                                    className="cursor-pointer secondary hover:text-error"
-                                    onClick={() => {
-                                      setDeleteModalOpen(true);
-                                      setDeleteId(item);
-                                    }}
-                                  />
-                                </Tooltip>
-                              </div>
-                            </div>
-                          </>
-                        ) : (
-                          <>
-                            {" "}
-                            <div className="w-full flex justify-center items-center">
-                              <Badge color="failure">{t("Data Deleted")}</Badge>
-                            </div>
-                          </>
-                        )}
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </>
-            ) : (
-              <></>
-            )}
-          </Table>
-        </div>
-      </div>
+      <UserTabalFilter
+        handleSearnch={handleSearnch}
+        handleSubmit={() => {
+          const accessToken = localStorage.getItem("access_token");
+          apiGetAllUsers(accessToken || "", currentPage);
+        }}
+        handleStatus={(e) => {
+          searnchApps.search_status = parseInt(e.target.value);
+          const accessToken = localStorage.getItem("access_token");
+          apiGetAllUsers(accessToken || "", currentPage);
+        }}
+        handleAddUser={() => {
+          setIsModalOpen(true);
+        }}
+      />
+      <TableData
+        userList={userList}
+        progressLoad={progressLoad}
+        currentPage={currentPage}
+        ItemsPerPage={itemsPerPage}
+        handleEdit={(item: any) => {
+          setEditData(item);
+          let us_fname = "";
+          let us_lname = "";
+          if (item.us_fullname != "") {
+            let list = item.us_fullname.split(" ");
+            us_fname = list[0];
+            us_lname = list[1];
+          }
+          formData.us_username = item.us_username;
+          formData.us_password = item.us_password;
+          formData.us_phone = item.us_phone;
+          formData.us_fname = us_fname;
+          formData.us_lname = us_lname;
+          formData.us_email = item.us_email;
+          formData.ap_status = item.us_status;
+          setUserName({
+            fname: us_fname,
+            lname: us_lname,
+          });
+          setIsModalOpen(true);
+        }}
+        handleDelete={(item: any) => {
+          setDeleteModalOpen(true);
+          setDeleteId(item);
+        }}
+      />
+
+      <TablePagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        totalItems={totalItems}
+        itemsPerPage={itemsPerPage}
+        onPageChange={onPageChange}
+        onItemsPerPageChange={handleItemsPerPageChange}
+      />
 
       {/* Modal for add and edit app*/}
       <ModalInformation
@@ -737,7 +649,7 @@ function UserTable() {
           });
         }}
       />
-      <ModalLoading show={isLoading} />
+      {/* <ModalLoading show={isLoading} /> */}
     </CardBox>
   );
 }

@@ -112,3 +112,24 @@ export interface UserModel {
   us_update: Date;
   us_delete: string;
 }
+
+export interface AppProfileModel {
+  id:            number;
+  us_id:         string;
+  us_username:   string;
+  us_email:      string;
+  us_fullname:   string;
+  us_phone:      string;
+  us_photo:      string;
+  us_status:     number;
+  us_tfa_active: number;
+  us_apps:       UsApp[];
+}
+
+export interface UsApp {
+  ap_id:      string;
+  ap_name_th: string;
+  ap_name_en: string;
+  ap_logo:    string;
+  ap_url:     string;
+}

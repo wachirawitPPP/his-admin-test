@@ -31,7 +31,7 @@
   "Search": "Search",
   "Next Queue": "Next Queue",
   "Repeat queue": "Repeat queue",
-  "Number": "No.",
+  "Number": "#",
   "Name": "Name",
   "Department": "Department",
   "Room": "Room",
@@ -110,8 +110,10 @@
   "Delete User": "Delete User",
   "App Logo": "App Logo",
   "Data Deleted": "Data Deleted",
-  "Forgot Password":"Forgot Password",
-  "Remember this Device":"Remember this Device",
-  "Sign In":"Sign In",
-  "Create your account":"Create your account"
+  "Forgot Password": "Forgot Password",
+  "Remember this Device": "Remember this Device",
+  "Sign In": "Sign In",
+  "Create your account": "Create your account",
+  "Some thing wrong": "Some thing wrong",
+  "All Status": "All Status"
 }

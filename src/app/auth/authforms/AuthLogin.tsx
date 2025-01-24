@@ -3,7 +3,7 @@
 import { Alert, Button, Checkbox, Label, TextInput } from "flowbite-react";
 import Link from "next/link";
 import React, { useState, useEffect } from "react";
-import { signIn, useSession } from "next-auth/react";
+
 import { useRouter } from "next/navigation";
 import { Icon } from "@iconify/react";
 import { loginType } from "@/app/(DashboardLayout)/types/auth/auth";
@@ -14,11 +14,11 @@ import { useTranslation } from "react-i18next";
 
 const AuthLogin = ({ title, subtitle, subtext }: loginType) => {
   const { t } = useTranslation();
-  const { data: session, status } = useSession(); // Use session and status from next-auth
+ 
   const router = useRouter();
 
-  const [username, setUsername] = useState("admin");
-  const [password, setPassword] = useState("admin123");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [messageError, setmessageError] = useState<MessageError>({
     isError: false,
@@ -26,11 +26,7 @@ const AuthLogin = ({ title, subtitle, subtext }: loginType) => {
   });
 
   // Handle redirection after login
-  useEffect(() => {
-    if (status === "authenticated") {
-      router.push("/"); // Redirect to the dashboard or homepage
-    }
-  }, [status, router]);
+ 
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -40,7 +36,7 @@ const AuthLogin = ({ title, subtitle, subtext }: loginType) => {
       setError("Username and Password are required");
       return;
     }
-    console.log(username, password);
+    // console.log(username, password);
 
     try {
       const result = await axios.post(
@@ -52,7 +48,7 @@ const AuthLogin = ({ title, subtitle, subtext }: loginType) => {
       );
 
       if (result.data.status === "success") {
-        apiLoginSso(result.data.refresh_token);
+        getProfile(result.data);
       } else {
         setmessageError({
           isError: true,
@@ -64,7 +60,7 @@ const AuthLogin = ({ title, subtitle, subtext }: loginType) => {
     }
   };
 
-  const apiLoginSso = async (rft: string) => {
+  const apiLoginSso = async (rft: string, appId: string) => {
     if (rft != "") {
       try {
         const result = await axios.post(
@@ -72,7 +68,7 @@ const AuthLogin = ({ title, subtitle, subtext }: loginType) => {
           "",
           {
             headers: {
-              "Ap-Id": process.env.NEXT_PUBLIC_AP_ID,
+              "Ap-Id": appId,
               Authorization: "Bearer " + rft,
             },
           }
@@ -119,6 +115,32 @@ const AuthLogin = ({ title, subtitle, subtext }: loginType) => {
     }
   };
 
+  const getProfile = async (req: any) => {
+    const profile = await axios.get(
+      `${process.env.NEXT_PUBLIC_AUTH_URL}/profile`,
+      {
+        headers: {
+          Authorization: `Bearer ${req.access_token}`,
+        },
+      }
+    );
+    if (profile.data.status === "success") {
+      if (profile.data.data.us_apps.length > 0) {
+        apiLoginSso(req.refresh_token, profile.data.data.us_apps[0].ap_id);
+      } else {
+        setmessageError({
+          isError: true,
+          message: t("Some thing wrong"),
+        });
+      }
+    } else {
+      setmessageError({
+        isError: true,
+        message: profile.data.message,
+      });
+    }
+  };
+
   const apiLogout = async () => {
     try {
       const payload = {
@@ -147,10 +169,6 @@ const AuthLogin = ({ title, subtitle, subtext }: loginType) => {
     }
   };
 
-  if (status === "loading") {
-    // Show a loading state while session is being fetched
-    return <p>Loading...</p>;
-  }
 
   return (
     <>
@@ -240,7 +258,7 @@ const AuthLogin = ({ title, subtitle, subtext }: loginType) => {
           {t("Create your account")}
         </Link>
       </div> */}
-      {subtitle}
+     
       <ModalError
         show={messageError.isError}
         content={messageError.message}

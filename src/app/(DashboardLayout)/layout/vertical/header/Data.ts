@@ -256,29 +256,13 @@ interface ProfileType {
 
 const profileDD: ProfileType[] = [
   {
-    icon: "solar:wallet-2-line-duotone",
+    icon: "tabler:browser-maximize",
     bgcolor: "bg-lightprimary dark:bg-lightprimary",
     color: "text-primary",
-    title: "My Profile",
-    subtitle: "Account settings",
+    title: "Apps Management",
+    subtitle: `${process.env.NEXT_PUBLIC_LOGIN_URL}/app-menu`,
     url: "",
-  },
-  {
-    icon: "solar:inbox-line-duotone",
-    color: "text-success",
-    bgcolor: "bg-lightsuccess dark:bg-lightsuccess",
-    title: "My Notes",
-    subtitle: "My Daily Notes",
-    url: "",
-  },
-  {
-    icon: "solar:checklist-minimalistic-line-duotone",
-    color: "text-error",
-    bgcolor: "bg-lighterror dark:bg-lighterror",
-    title: "My Tasks",
-    subtitle: "To-do and Daily tasks",
-    url: "",
-  },
+  }
 ];
 
 export {

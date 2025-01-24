@@ -144,7 +144,7 @@ const RoleMenuAccessTable: React.FC<RoleMenuProps> = ({
 
                         <TableCell className="flex justify-center items-center whitespace-nowrap ">
                           {" "}
-                          <div className="flex flex-row gap-4 whitespace-nowrap">
+                          <div className="flex flex-row gap-4">
                             <ToggleSwitch
                               checked={item.role_map_menu === 1 ? true : false}
                               onChange={() => {

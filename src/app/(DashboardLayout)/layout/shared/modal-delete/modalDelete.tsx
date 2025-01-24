@@ -2,9 +2,9 @@
 import React, { useContext } from "react";
 import { Button, Modal } from "flowbite-react";
 import { Icon } from "@iconify/react";
-import { CustomizerContext } from "@/app/context/customizerContext";
 import { useTranslation } from "react-i18next";
-import WarningDeleteComponent from "../../../../components/shared/warningDelete";
+import RushAnimation from "@/app/components/shared/rushAnimation";
+import wainingAnt from "../../../../../../public/images/animation-warning.json";
 
 interface props {
   title: string;
@@ -31,7 +31,19 @@ const ModalDelete = ({
       </Modal.Header>
       <Modal.Body className="py-0">
         <div>
-          <WarningDeleteComponent />
+          {/* <div className="w-full flex justify-center">
+          <Icon
+            icon={"tabler:alert-triangle"}
+            className={`text-warning`}
+            height={128}
+          />
+          </div> */}
+          <RushAnimation
+            animation={wainingAnt}
+            loop={false}
+            width="80%"
+            height="80%"
+          />
           <div className="w-full flex justify-center ">
             <h2>
               {t("Do you want to delete")} {detail} ?

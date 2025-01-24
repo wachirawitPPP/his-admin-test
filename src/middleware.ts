@@ -1,26 +1,26 @@
-import { withAuth } from 'next-auth/middleware';
-import { NextResponse } from 'next/server';
+import { NextResponse, NextRequest } from 'next/server';
 
-export default withAuth(
-  async function middleware(req) {
-    const { pathname } = req.nextUrl;
+export function middleware(req: NextRequest) {
+  const { pathname } = req.nextUrl;
+  const token = req.cookies.get('authToken'); // Example using cookies
 
-    // Redirect all unauthorized users except on the /login page
-    // if (pathname !== '/login') {
-    //   return NextResponse.redirect(new URL('http://127.0.0.1:3000/auth/auth1/login', req.url));
-    // }
+  // Redirect root ("/") to "/app-menu"
+  // if (pathname === "/") {
+  //   return NextResponse.redirect(new URL('/app-menu', req.url));
+  // }
 
-    return NextResponse.next(); // Allow access
-  },
-  {
-    callbacks: {
-      authorized: () => true, // Enable token checks globally, let middleware handle logic
-    },
-  }
-);
+  // // Example: Protect all routes except public ones
+  // const publicPaths = ['/login', '/signup'];
+  // const isPublic = publicPaths.includes(pathname);
+
+  // if (!isPublic && !token) {
+  //   // If user is not authenticated, redirect to login
+  //   return NextResponse.redirect(new URL('/login', req.url));
+  // }
+
+  return NextResponse.next(); // Allow request to continue
+}
 
 export const config = {
-  matcher: [
-    '/((?!login).*)', // Matches all routes except /login
-  ],
+  matcher: ['/:path*'], // Apply to all routes
 };

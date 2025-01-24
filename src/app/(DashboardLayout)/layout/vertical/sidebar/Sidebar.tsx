@@ -79,7 +79,7 @@ const SidebarLayout = () => {
                       <h5 className="text-link font-semibold text-sm caption ">
                         {t(`${item.heading}`)}
                       </h5>
-                      <div className="h-[calc(90vh_-_85px)]">
+                      <div className="h-[calc(90vh_-_85px)] overflow-auto">
                         {item.children?.map((child, index) => (
                           <React.Fragment key={child.id && index}>
                             {child.children ? (

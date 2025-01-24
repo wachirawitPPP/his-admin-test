@@ -32,7 +32,7 @@
   "Search": "ค้นหา",
   "Next Queue": "คิวถัดไป",
   "Repeat queue": "เรียกคิวซ้ำ",
-  "Number": "ลำดับ",
+  "Number": "#",
   "Name": "ชื่อ-นามสกุล",
   "Department": "แผนก",
   "Room": "ห้อง",
@@ -116,5 +116,8 @@
   "Forgot Password": "ลืมรหัสผ่าน",
   "Remember this Device": "จำรหัสผ่าน",
   "Sign In": "เข้าสู่ระบบ",
-  "Create your account": "สร้างบัญชี"
+  "Create your account": "สร้างบัญชี",
+  "Data Not Found": "ไม่พบข้อมูล",
+  "Some thing wrong": "มีบางอย่างผิดพลาด",
+  "All Status": "ทุกสถานะ"
 }

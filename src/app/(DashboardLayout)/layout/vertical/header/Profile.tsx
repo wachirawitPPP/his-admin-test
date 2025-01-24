@@ -4,7 +4,7 @@ import React, { useEffect, useState, useContext } from "react";
 import * as profileData from "./Data";
 import Link from "next/link";
 import Image from "next/image";
-import { useSession, signOut } from "next-auth/react";
+// import { useSession, signOut } from "next-auth/react";
 import SimpleBar from "simplebar-react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
@@ -41,13 +41,9 @@ const Profile = () => {
 
   const apiLogout = async () => {
     try {
-      const payload = {
-        verify_code: "",
-        password: "",
-      };
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_AUTH_URL}/auth/logout`,
-        payload,
+        null,
         {
           headers: {
             authorization: "Bearer " + localStorage.getItem("refresh_token"),
@@ -55,10 +51,10 @@ const Profile = () => {
         }
       );
       if (response.data.status == "success") {
-        localStorage.setItem("user", "");
-        localStorage.setItem("access_token", "");
-        localStorage.setItem("refresh_token", "");
-        router.push(`${process.env.NEXT_PUBLIC_LOGIN_URL}/auth/auth1/login`);
+        localStorage.removeItem("username");
+        localStorage.removeItem("access_token");
+        localStorage.removeItem("refresh_token");
+        router.push(`${process.env.NEXT_PUBLIC_LOGIN_URL}/app-menu`);
       }
     } catch (error: any) {
       throw new Error(

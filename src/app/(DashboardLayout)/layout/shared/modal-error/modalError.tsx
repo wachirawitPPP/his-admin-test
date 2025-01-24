@@ -2,7 +2,8 @@
 import React, { useContext } from "react";
 import { Button, Modal } from "flowbite-react";
 import { useTranslation } from "react-i18next";
-import WarningComponent from "../../../../components/shared/warningComponent";
+import RushAnimation from "@/app/components/shared/rushAnimation";
+import dangerAnt from "../../../../../../public/images/animation-danger.json";
 
 interface props {
   content: string;
@@ -10,11 +11,7 @@ interface props {
   cancelFunc: () => void;
 }
 
-const ModalError = ({
-  show,
-  content,
-  cancelFunc = () => {},
-}: props) => {
+const ModalError = ({ show, content, cancelFunc = () => {} }: props) => {
   const { t } = useTranslation();
   return (
     <Modal show={show} onClose={cancelFunc} className="w-full" size={"xl"}>
@@ -24,7 +21,12 @@ const ModalError = ({
       <Modal.Body className="py-0">
         <div className="w-full flex justify-center flex-col my-4 ">
           <div className="w-full flex justify-center ">
-            <WarningComponent />
+            <RushAnimation
+              animation={dangerAnt}
+              loop={false}
+              width="80%"
+              height="80%"
+            />
           </div>
           <div className="w-full flex justify-center ">
             <h2>{content}</h2>{" "}

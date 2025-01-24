@@ -24,7 +24,6 @@ const Page = () => {
       {isClient ? (
         <div>
           <BreadcrumbComp title="User" items={BCrumb} />
-
           <UserTable />
         </div>
       ) : (

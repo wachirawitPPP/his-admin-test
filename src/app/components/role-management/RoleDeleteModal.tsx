@@ -1,7 +1,11 @@
 import axios from "axios";
 import { Modal, Button } from "flowbite-react";
-import { errorToast,successCreateToast ,successUpdateToast } from "@/utils/toast";
-
+import {
+  errorToast,
+  successCreateToast,
+  successUpdateToast,
+} from "@/utils/toast";
+import { t } from "i18next";
 
 interface DeleteModalProps {
   selectedRole: any;
@@ -57,16 +61,15 @@ const RoleDeleteModal: React.FC<DeleteModalProps> = ({
             undone.
           </p>
         </div>
-        <hr className="mt-4" />
-        <div className="flex justify-end mt-4 gap-4">
-          <Button color="primary" onClick={handleSubmit}>
-            Confirm
-          </Button>
-          <Button color="secondary" onClick={() => setModalOpen(false)}>
-            Cancel
-          </Button>
-        </div>
       </Modal.Body>
+      <Modal.Footer className="flex justify-end gap-4">
+        <Button color="primary" onClick={handleSubmit}>
+          {t("Save")}
+        </Button>
+        <Button color="secondary" onClick={() => setModalOpen(false)}>
+          {t("Cancel")}
+        </Button>
+      </Modal.Footer>
     </Modal>
   );
 };

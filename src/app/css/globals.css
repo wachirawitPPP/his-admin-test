@@ -2,22 +2,20 @@
 @tailwind components;
 @tailwind utilities;
 
-
-
-@import './layouts/container.css';
-@import './layouts/sidebar.css';
-@import './layouts/horizontal.css';
-@import './layouts/header.css';
-@import './pages/dashboards.css';
-@import './pages/widgets.css';
-@import './pages/landingpage.css';
-@import './pages/auth.css';
-@import './pages/app.css';
-@import './theme/default-colors.css';
-@import './theme/dark.css';
-@import './override/reboot.css';
-@import './layouts/rtl.css';
-@import './pages/frontpages.css';
+@import "./layouts/container.css";
+@import "./layouts/sidebar.css";
+@import "./layouts/horizontal.css";
+@import "./layouts/header.css";
+@import "./pages/dashboards.css";
+@import "./pages/widgets.css";
+@import "./pages/landingpage.css";
+@import "./pages/auth.css";
+@import "./pages/app.css";
+@import "./theme/default-colors.css";
+@import "./theme/dark.css";
+@import "./override/reboot.css";
+@import "./layouts/rtl.css";
+@import "./pages/frontpages.css";
 
 @layer components {
   .container {
@@ -37,11 +35,11 @@
   }
 
   .card-title {
-    @apply text-lg font-semibold text-dark dark:text-white
+    @apply text-lg font-semibold text-dark dark:text-white;
   }
 
   .card-subtitle {
-    @apply text-sm dark:text-darklink font-medium
+    @apply text-sm dark:text-darklink font-medium;
   }
 
   body {
@@ -63,13 +61,12 @@
   }
 
   .bg-hover {
-    @apply hover:bg-lighthover hover:dark:bg-darkmuted
+    @apply hover:bg-lighthover hover:dark:bg-darkmuted;
   }
 
   .form-control input {
-    @apply border border-border dark:border-darkborder bg-transparent dark:bg-transparent w-full text-sm;
+    @apply rounded-md border border-border dark:border-darkborder bg-transparent dark:bg-transparent w-full text-base;
   }
-
 
   .form-control-chat input {
     @apply rounded-md border-0 bg-transparent dark:bg-transparent w-full text-sm;
@@ -83,7 +80,7 @@
   }
 
   .form-control-rounded input:focus {
-    @apply border-primary dark:border-primary outline-none shadow-none ring-offset-0 ring-transparent;
+    @apply form-control border-primary dark:border-primary outline-none shadow-none ring-offset-0 ring-transparent;
   }
 
   .form-control-textarea {
@@ -95,7 +92,7 @@
   }
 
   .form-control input:focus {
-    @apply border-primary dark:border-primary outline-none shadow-none ring-offset-0 ring-transparent;
+    @apply  border-primary dark:border-primary outline-none shadow-none ring-offset-0 ring-transparent;
   }
 
   .form-control-input {
@@ -107,11 +104,11 @@
   }
 
   .form-rounded-md input {
-    @apply rounded-md border border-border dark:border-darkborder bg-transparent dark:bg-transparent w-full text-sm text-dark dark:text-white;
+    @apply rounded-md border border-border text-base p-2 dark:border-darkborder bg-transparent dark:bg-transparent w-full text-dark dark:text-white;
   }
 
   .form-rounded-md input::placeholder {
-    @apply text-gray-400 dark:text-gray-600;
+    @apply text-gray-400 text-base dark:text-gray-600;
   }
 
   .form-rounded-md input:focus {
@@ -119,20 +116,19 @@
   }
 
   .form-rounded input {
-    @apply rounded-md 
+    @apply rounded-md;
   }
-
 
   .input-center input {
     @apply text-center;
   }
 
   .elipse {
-    @apply w-[18px] h-[10px]
+    @apply w-[18px] h-[10px];
   }
 
   input::placeholder {
-    @apply text-darklink dark:text-darklink
+    @apply text-darklink dark:text-darklink;
   }
 
   .select-option select {
@@ -140,7 +136,7 @@
   }
 
   .select-md select {
-    @apply border-ld bg-transparent dark:bg-darkgray w-full text-sm rounded-md focus:border-primary dark:focus:border-primary focus:ring-0;
+    @apply text-base p-2 border-ld bg-transparent dark:bg-darkgray w-full  rounded-md focus:border-primary dark:focus:border-primary focus:ring-0;
   }
 
   .select-rounded select {
@@ -156,7 +152,7 @@
   }
 
   .checkbox {
-    @apply h-[18px] w-[18px] border border-bordergray dark:border-darkborder bg-transparent focus:ring-0 focus:ring-offset-0
+    @apply h-[18px] w-[18px] border border-bordergray dark:border-darkborder bg-transparent focus:ring-0 focus:ring-offset-0;
   }
 
   .text-primary-ld {
@@ -173,7 +169,7 @@
   }
 
   .btn-circle-hover {
-    @apply h-9 w-9 flex justify-center items-center rounded-md hover:bg-lightprimary hover:text-primary cursor-pointer bg-transparent
+    @apply h-9 w-9 flex justify-center items-center rounded-md hover:bg-lightprimary hover:text-primary cursor-pointer bg-transparent;
   }
 
   .text-ld {
@@ -185,74 +181,95 @@
   }
 
   .sorting button {
-    @apply bg-transparent text-dark dark:text-white p-0
+    @apply bg-transparent text-dark dark:text-white p-0;
   }
 
   .sorting button:hover {
-    @apply bg-transparent
+    @apply bg-transparent;
   }
 
   .sorting button span {
-    @apply p-0
+    @apply p-0;
   }
 
   .sorting ul li {
-    @apply px-4 py-2
+    @apply px-4 py-2;
   }
 
   .sorting ul li button:hover {
-    @apply hover:text-primary
+    @apply hover:text-primary;
   }
 
   /* Button Hover Color Set */
   button.bg-primary {
-    @apply hover:bg-primaryemphasis rounded-md
+    @apply hover:bg-primaryemphasis rounded-md;
   }
 
   button.bg-secondary {
-    @apply hover:bg-secondaryemphasis rounded-md
+    @apply hover:bg-secondaryemphasis rounded-md;
   }
 
   button.bg-info {
-    @apply hover:bg-infoemphasis rounded-md
+    @apply hover:bg-infoemphasis rounded-md;
   }
 
   button.bg-error {
-    @apply hover:bg-erroremphasis rounded-md
+    @apply hover:bg-erroremphasis rounded-md;
   }
 
   button.bg-success {
-    @apply hover:bg-successemphasis rounded-md
+    @apply hover:bg-successemphasis rounded-md;
   }
 
   button.bg-warning {
-    @apply hover:bg-warningemphasis rounded-md
+    @apply hover:bg-warningemphasis rounded-md;
   }
 
   /* Headlessui */
-  .ui-button{
-    @apply flex items-stretch justify-between text-center py-2.5 px-5 text-white text-center font-medium rounded-md 
+  .ui-button {
+    @apply flex items-stretch justify-between text-center py-2.5 px-5 text-white text-center font-medium rounded-md;
   }
-  .ui-button-small{
-    @apply flex items-stretch justify-between text-center py-2 px-6 text-white text-center font-medium rounded-md 
+  .ui-button-small {
+    @apply flex items-stretch justify-between text-center py-2 px-6 text-white text-center font-medium rounded-md;
   }
-  .ui-dropdown{
-    @apply text-ld  w-full !max-w-56 bg-white dark:bg-dark  shadow-md dark:shadow-dark-md text-start rounded-sm py-3
+  .ui-dropdown {
+    @apply text-ld  w-full !max-w-56 bg-white dark:bg-dark  shadow-md dark:shadow-dark-md text-start rounded-sm py-3;
   }
-  .ui-dropdown-item{
-    @apply flex w-full gap-3 cursor-pointer items-center justify-start px-4 py-2 text-sm text-ld hover:text-primary bg-hover  focus:bg-hover focus:outline-none
+  .ui-dropdown-item {
+    @apply flex w-full gap-3 cursor-pointer items-center justify-start px-4 py-2 text-sm text-ld hover:text-primary bg-hover  focus:bg-hover focus:outline-none;
   }
-  .ui-dropdown-animation{
-    @apply origin-top-right transition duration-100 ease-out [--anchor-gap:var(--spacing-1)] focus:outline-none data-[closed]:scale-95 data-[closed]:opacity-0
+  .ui-dropdown-animation {
+    @apply origin-top-right transition duration-100 ease-out [--anchor-gap:var(--spacing-1)] focus:outline-none data-[closed]:scale-95 data-[closed]:opacity-0;
   }
   .ui-form-control {
-    @apply border border-border dark:border-darkborder bg-transparent dark:bg-transparent w-full text-sm ;
+    @apply border border-border dark:border-darkborder bg-transparent dark:bg-transparent w-full text-sm;
   }
   .ui-form-control:focus {
     @apply border-primary dark:border-primary outline-none shadow-none ring-offset-0 ring-transparent dark:ring-transparent focus:dark:ring-0;
-  } 
-  .ui-checkbox{
-    @apply h-[18px] w-[18px] border border-bordergray dark:border-darkborder bg-white dark:bg-transparent data-[checked]:bg-primary dark:data-[checked]:bg-primary rounded cursor-pointer focus:ring-0 focus:ring-offset-0 outline-none
   }
-   
+  .ui-checkbox {
+    @apply h-[18px] w-[18px] border border-bordergray dark:border-darkborder bg-white dark:bg-transparent data-[checked]:bg-primary dark:data-[checked]:bg-primary rounded cursor-pointer focus:ring-0 focus:ring-offset-0 outline-none;
+  }
+
+  /* width */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-lightprimary);
+    border-radius: 5px;
+  }
+
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-primary);
+  }
 }

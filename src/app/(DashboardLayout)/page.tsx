@@ -23,7 +23,7 @@ const page = () => {
       title: "Home",
     },
     {
-      title: "page",
+      title: "Dashboard",
     },
   ];
 
@@ -132,8 +132,10 @@ const page = () => {
           </CardBox>
         </div>
       ) : (
-        <div>
-          <LoadingComponent />
+        <div className="w-full flex justify-center">
+          <div className="w-2/3">
+            <LoadingComponent />
+          </div>
         </div>
       )}
     </>

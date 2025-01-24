@@ -1,6 +1,7 @@
 "use client";
 import React, { createContext, useState, ReactNode, useEffect } from "react";
 import config from "./config";
+import { AppProfileModel } from "@/utils/type/patientTypes";
 
 // Define the shape of the context state
 interface CustomizerContextState {

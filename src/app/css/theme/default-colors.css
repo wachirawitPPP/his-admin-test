@@ -64,12 +64,11 @@
 [data-color-theme="CYAN_THEME"]{
     --color-primary: #01C0C8;
     --color-primary-emphasis:#01a3aa;   
-    --color-secondary-emphasis:#d58066;
-    --color-secondary: #f8b8a4;
+    --color-secondary-emphasis:#525151;
+    --color-secondary: #706e6e;
     --color-lightprimary:#01C0C820;
     --color-lightsecondary:#FB967820;
     --color-lightsuccess:#00ceb620;
-    
 }
 [data-color-theme="ORANGE_THEME"]{
     --color-primary: #FA896B;

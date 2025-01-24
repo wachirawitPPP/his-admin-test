@@ -130,21 +130,15 @@ const RoleCreateModal: React.FC<RoleEditModalProps> = ({
             </div>
           </div>
         </div>
-
-        <hr className="mt-6" />
-        <div className="flex justify-end mt-4 gap-4">
-          <Button
-            color="primary"
-            onClick={handleSubmit}
-            className="bg-primary hover:bg-primary-dark"
-          >
-            {t("Save")}
-          </Button>
-          <Button color="secondary" onClick={() => setIsOpen(false)}>
-            {t("Cancel")}
-          </Button>
-        </div>
       </Modal.Body>
+      <Modal.Footer className="flex justify-end gap-4">
+        <Button color="primary" onClick={handleSubmit}>
+          {t("Save")}
+        </Button>
+        <Button color="secondary" onClick={() => setIsOpen(false)}>
+          {t("Cancel")}
+        </Button>
+      </Modal.Footer>
     </Modal>
   );
 };

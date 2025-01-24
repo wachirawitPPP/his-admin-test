@@ -1,15 +1,12 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import LoadingComponent from "../components/shared/LoadingComponent";
 
 const Login = () => {
   const router = useRouter();
   const [rftk, setRftk] = useState("");
   const [acctk, setAcctk] = useState("");
-  // const searchParams = useSearchParams();
-  // const rftk = searchParams.get("rftk"); // Refresh token
-  // const acctk = searchParams.get("acctk"); // Access token
 
   useEffect(() => {
     let url = window.location.href;

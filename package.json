@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --port 4000",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -16,8 +16,8 @@
     "@tabler/icons-react": "3.5.0",
     "@tanstack/react-table": "^8.20.5",
     "@types/react-big-calendar": "^1.15.0",
-    "apexcharts": "^3.54.1",
-    "axios": "1.5.1",
+    "apexcharts": "^4.4.0",
+    "axios": "^1.7.9",
     "axios-mock-adapter": "1.22.0",
     "chance": "1.1.11",
     "date-fns": "2.30.0",
@@ -28,8 +28,9 @@
     "lodash": "4.17.21",
     "lottie-react": "^2.4.0",
     "moment": "2.29.4",
-    "next": "14.2.4",
+    "next": "^14.2.23",
     "next-auth": "^4.24.7",
+    "next-nprogress-bar": "^2.4.3",
     "react": "18",
     "react-apexcharts": "^1.4.1",
     "react-big-calendar": "^1.15.0",
@@ -45,6 +46,7 @@
   },
   "devDependencies": {
     "@types/chance": "1.1.6",
+    "@types/lodash": "^4.17.14",
     "@types/node": "20",
     "@types/react": "18",
     "@types/react-dom": "18",

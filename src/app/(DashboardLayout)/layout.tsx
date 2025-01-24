@@ -7,7 +7,10 @@ import { CustomizerContext } from "@/app/context/customizerContext";
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import toast, { ToastBar, Toaster } from "react-hot-toast";
+import { AppProgressBar as ProgressBar } from "next-nprogress-bar";
+import CardBox from "../components/shared/CardBox";
+import Link from "next/link";
+import { ToastBar, Toaster } from "react-hot-toast";
 // Define the shape of the context state
 
 interface TokenPayload {
@@ -16,6 +19,7 @@ interface TokenPayload {
 }
 
 const handleLogout = () => {
+  localStorage.removeIteme("user");
   localStorage.removeItem("access_token");
   localStorage.removeItem("refresh_token");
   window.location.href = `${process.env.NEXT_PUBLIC_LOGIN_URL}/auth/auth1/login`; // Redirect to login
@@ -107,47 +111,73 @@ export default function Layout({
     const accessToken = localStorage.getItem("access_token") || "";
     apiAuthValidate(accessToken);
   }, []);
-  return isLoad ? (
-    <div></div>
-  ) : (
-    <div className="flex w-full min-h-screen">
-      <div className="page-wrapper flex w-full">
-        <Toaster>
-          {(t) => (
-            <ToastBar
-              toast={t}
-              style={{
-                ...t.style,
-                animation: t.visible
-                  ? "custom-enter 2s ease"
-                  : "custom-exit 2s ease forwards",
-              }}
-            />
-          )}
-        </Toaster>
-        {/* Header/sidebar */}
-        {activeLayout == "vertical" ? <Sidebar /> : null}
-        <div className="body-wrapper w-full bg-lightgray dark:bg-dark">
-          {/* Top Header  */}
-          {activeLayout == "horizontal" ? (
-            <Header layoutType="horizontal" />
-          ) : (
-            <Header layoutType="vertical" />
-          )}
-          {/* Body Content  */}
-          <div
-            className={` ${
-              isLayout == "full"
-                ? "w-full py-[30px] md:px-[30px] px-5"
-                : "container mx-auto  py-[30px]"
-            } ${activeLayout == "horizontal" ? "xl:mt-3" : ""}
+  return (
+    <>
+      {isLoad ? (
+        <div></div>
+      ) : (
+        <div className="flex w-full min-h-screen">
+          <div className="page-wrapper flex w-full">
+            <Toaster>
+              {(t) => (
+                <ToastBar
+                  toast={t}
+                  style={{
+                    ...t.style,
+                    animation: t.visible
+                      ? "custom-enter 2s ease"
+                      : "custom-exit 2s ease forwards",
+                  }}
+                />
+              )}
+            </Toaster>
+            {/* Header/sidebar */}
+            {activeLayout == "vertical" ? <Sidebar /> : null}
+            <div className="body-wrapper w-full bg-lightgray dark:bg-dark">
+              <ProgressBar
+                height="4px"
+                color="var(--color-primary)"
+                options={{ showSpinner: false }}
+                shallowRouting
+              />
+              {/* Top Header  */}
+              {activeLayout == "horizontal" ? (
+                <Header layoutType="horizontal" />
+              ) : (
+                <Header layoutType="vertical" />
+              )}
+              {/* Body Content  */}
+              <div
+                className={` ${
+                  isLayout == "full"
+                    ? "w-full py-[30px] md:px-[30px] px-5"
+                    : "container mx-auto  py-[30px]"
+                } ${activeLayout == "horizontal" ? "xl:mt-3" : ""}
             `}
-          >
-            {children}
+              >
+                {children}
+              </div>
+              <div className="mx-7">
+                <footer>
+                  <CardBox className="mb-[30px]">
+                    <div className=" flex flex-row gap-2">
+                      <p>Copyright © 2025</p>
+                      <Link
+                        target="_blank"
+                        href={"https://www.apsth.com/"}
+                        className="text-primary text-sm font-medium"
+                      >
+                        APSX Platform | by APSTH
+                      </Link>
+                    </div>
+                  </CardBox>
+                </footer>
+              </div>
+              <Customizer />
+            </div>
           </div>
-          <Customizer />
         </div>
-      </div>
-    </div>
+      )}
+    </>
   );
 }

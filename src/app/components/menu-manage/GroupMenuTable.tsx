@@ -16,6 +16,7 @@ import {
   Badge,
   Button,
   Modal,
+  Spinner,
   Table,
   TableBody,
   TableCell,
@@ -37,13 +38,29 @@ import { useRouter } from "next/navigation";
 import { menuType } from "@/utils/type/menuType";
 import LoadingComponent from "../shared/LoadingComponent";
 import toast, { Toaster } from "react-hot-toast";
+import TableFilter from "../shared/TableFilter";
 
 interface MenuTableProps {
+  handleSearchTextChange: (value: string) => void;
+  handleSearchStatusChange: (value: string) => void;
+  loading: boolean;
+  searchText: string;
+  searchStatus: string;
+  handleSearch: () => void;
   menuList: menuType[];
   getMenuList: () => void;
 }
 
-const MenuTable: React.FC<MenuTableProps> = ({ menuList, getMenuList }) => {
+const MenuTable: React.FC<MenuTableProps> = ({
+  menuList,
+  getMenuList,
+  loading,
+  searchText,
+  handleSearchTextChange,
+  handleSearch,
+  searchStatus,
+  handleSearchStatusChange,
+}) => {
   const { t } = useTranslation();
   const router = useRouter();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -56,9 +73,6 @@ const MenuTable: React.FC<MenuTableProps> = ({ menuList, getMenuList }) => {
     name_th: "",
     icon: "",
     sort: null,
-    // sort: selectedMenu.mng_sort,
-    // status: selectedMenu.mng_status,
-    // delete_flag: selectedMenu.mng_delete,
   });
 
   const handleEditGroupMenu = (item: menuType) => {
@@ -70,32 +84,45 @@ const MenuTable: React.FC<MenuTableProps> = ({ menuList, getMenuList }) => {
       name_th: item.mng_name_th,
       icon: item.mng_icon,
       sort: item.mng_sort,
-      // status: item.mng_status,
-      // delete_flag: item.mng_delete,
     });
   };
 
-  
   return (
     <>
-      <div className="flex flex-row justify-end w-full py-2 gap-4">
-       
-        <Button
-          color={"primary"}
-          onClick={() => {
-            setIsSortModalOpen(true);
-          }}
-        >
-          {t("Sort Menu")} <IconListNumbers />
-        </Button>
-        <Button
-          color={"primary"}
-          onClick={() => {
-            setIsAddModalOpen(true);
-          }}
-        >
-          {t("Add")} <IconPlus />
-        </Button>
+      <div className="flex flex-col md:flex-row items-center justify-between w-full  gap-4">
+        {/* Table Filter Section */}
+        <div className="w-full md:w-6/12 items-center">
+          <TableFilter
+            searchText={searchText}
+            handleSearchTextChange={handleSearchTextChange}
+            searchStatus={searchStatus}
+            handleSearchStatusChange={handleSearchStatusChange}
+            onSearch={handleSearch}
+          />
+        </div>
+
+        {/* Actions Section */}
+        <div className="flex flex-col md:flex-row justify-end items-center w-full md:w-6/12  gap-4">
+          <Button
+            color={"primary"}
+            onClick={() => {
+              setIsSortModalOpen(true);
+            }}
+            className="w-full md:w-36 "
+          >
+            {t("Sort Menu")} <IconListNumbers />
+          </Button>
+
+          <Button
+            color={"primary"}
+            className="w-full md:w-36 "
+            onClick={() => {
+              setIsAddModalOpen(true);
+            }}
+          >
+            {t("Add")} <IconPlus />
+          </Button>
+        </div>
       </div>
       <div className="border rounded-md border-ld overflow-hidden">
         <div className="overflow-auto  r-4 shadow-md rounded   ">
@@ -111,25 +138,36 @@ const MenuTable: React.FC<MenuTableProps> = ({ menuList, getMenuList }) => {
               <TableHeadCell>{t("Icon")}</TableHeadCell>
               <TableHeadCell>{t("Status")}</TableHeadCell>
               {/* <TableHeadCell>{t("Order")}</TableHeadCell> */}
-              <TableHeadCell className="flex justify-center whitespace-nowrap">
+              <TableHeadCell className="flex justify-center ">
                 Action
               </TableHeadCell>
             </TableHead>
-            {menuList.length > 0 ? (
+            {loading ? (
+              <TableBody>
+                <TableRow>
+                  <TableCell colSpan={7}>
+                    <div className="flex justify-center items-center py-8 h-72">
+                      <Spinner size="xl" color="info" />
+                    </div>
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            ) : menuList.length > 0 ? (
               <>
-                {" "}
                 <TableBody>
                   {menuList.map((item, index) => (
                     <TableRow
                       key={index}
                       className={`dark:text-white hover:bg-lightprimary hover:text-primary  dark:hover:bg-lightprimary`}
                     >
-                       <TableCell className="flex justify-center">{item.mng_sort || "-"}</TableCell>
-                      <TableCell>{item.mng_name_th || "-"}</TableCell>
+                      <TableCell className="flex justify-center">
+                        {item.mng_sort || "-"}
+                      </TableCell>
+                      <TableCell className=" whitespace-nowrap">{item.mng_name_th || "-"}</TableCell>
                       <TableCell>{item.mng_name_en || "-"}</TableCell>
                       <TableCell>{item.mng_icon || "-"}</TableCell>
 
-                      <TableCell className="whitespace-nowrap">
+                      <TableCell className=" whitespace-nowrap">
                         {item.mng_status == 1 ? (
                           <>
                             <Badge color="primary">{t("Active")}</Badge>
@@ -140,10 +178,9 @@ const MenuTable: React.FC<MenuTableProps> = ({ menuList, getMenuList }) => {
                           </>
                         )}
                       </TableCell>
-                     
-                      <TableCell className="flex justify-center items-center whitespace-nowrap ">
-                        {" "}
-                        <div className="flex flex-row gap-4 whitespace-nowrap">
+
+                      <TableCell className="flex justify-center items-center ">
+                        <div className="flex flex-row gap-4">
                           <div className="flex justify-center items-center">
                             <Tooltip content={t("See menu")} style="dark">
                               <IconList
@@ -187,8 +224,10 @@ const MenuTable: React.FC<MenuTableProps> = ({ menuList, getMenuList }) => {
               <TableBody>
                 <TableRow>
                   <TableCell colSpan={7}>
-                    <div className="flex justify-center ">
-                      <LoadingComponent />
+                    <div className="flex justify-center h-72 items-center ">
+                      <span className="text-gray-500 text-lg">
+                        {t("Data Not Found")}
+                      </span>
                     </div>
                   </TableCell>
                 </TableRow>
@@ -198,7 +237,6 @@ const MenuTable: React.FC<MenuTableProps> = ({ menuList, getMenuList }) => {
         </div>
       </div>
 
-     
       {/* <GruopMenuCreateModal/> */}
       <GruopMenuEditModal
         isOpen={isEditModalOpen}

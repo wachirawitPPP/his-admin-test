@@ -1,7 +1,24 @@
 import React from "react";
 import { RoleType } from "@/utils/type/roleType";
-import { IconListNumbers, IconPlus, IconList, IconEdit, IconTrash } from "@tabler/icons-react";
-import { Button, Table, TableHead, TableHeadCell, TableBody, TableRow, TableCell, Badge, Tooltip } from "flowbite-react";
+import {
+  IconListNumbers,
+  IconPlus,
+  IconList,
+  IconEdit,
+  IconTrash,
+} from "@tabler/icons-react";
+import {
+  Button,
+  Table,
+  TableHead,
+  TableHeadCell,
+  TableBody,
+  TableRow,
+  TableCell,
+  Badge,
+  Tooltip,
+  Spinner,
+} from "flowbite-react";
 import { t } from "i18next";
 import router from "next/router";
 import LoadingComponent from "../shared/LoadingComponent";
@@ -9,35 +26,57 @@ import RoleEditModal from "./RoleEditModal";
 import RoleCreateModal from "./RoleCreateModal";
 import RoleDeleteModal from "./RoleDeleteModal";
 import RoleMenuAccessTable from "./RoleMenuAccessTable";
+import TableFilter from "../shared/TableFilter";
+import RushAnimation from "@/app/components/shared/rushAnimation";
+import emptyAnt from "../../../../public/images/animation_empty.json";
 
 interface RoleTableProps {
+  handleSearchTextChange: (value: string) => void;
+  handleSearchStatusChange: (value: string) => void;
+  handleSearch: () => void;
   roleList: RoleType[];
-  getRoleList:()=>void
+  loading: boolean;
+  searchText: string;
+  searchStatus: string;
+  getRoleList: () => void;
 }
 
-const RoleTable: React.FC<RoleTableProps> = ({ roleList,getRoleList }) => {
-    const [isAddModalOpen, setIsAddModalOpen] = React.useState(false);
-    const [isSortModalOpen, setIsSortModalOpen] = React.useState(false);
-    const [editRoleModalOpen, setEditRoleModalOpen] = React.useState(false);
-    const [deleteRoleModalOpen, setDeleteRoleModalOpen] = React.useState(false);
-    const [roleAccessTableModalOpen , setRoleAccessTableModalOpen] = React.useState(false)
-    const [selectedRole, setSelectedRole] = React.useState<RoleType>();
+const RoleTable: React.FC<RoleTableProps> = ({
+  roleList,
+  getRoleList,
+  loading,
+  searchText,
+  handleSearchTextChange,
+  handleSearch,
+  searchStatus,
+  handleSearchStatusChange,
+}) => {
+  const [isAddModalOpen, setIsAddModalOpen] = React.useState(false);
+  const [isSortModalOpen, setIsSortModalOpen] = React.useState(false);
+  const [editRoleModalOpen, setEditRoleModalOpen] = React.useState(false);
+  const [deleteRoleModalOpen, setDeleteRoleModalOpen] = React.useState(false);
+  const [roleAccessTableModalOpen, setRoleAccessTableModalOpen] =
+    React.useState(false);
+  const [selectedRole, setSelectedRole] = React.useState<RoleType>();
+
   return (
     <>
-      <div className="flex flex-row justify-end w-full py-2 gap-4">
-        {/* <Button
-          color={"primary"}
-          onClick={() => {
-            // setIsSortModalOpen(true);
-          }}
-        >
-          {t("Sort Menu")} <IconListNumbers />
-        </Button> */}
+      <div className="flex flex-col md:flex-row justify-between w-full py-2 gap-4">
+        <div className="w-full md:w-6/12 items-center">
+          <TableFilter
+            searchText={searchText}
+            handleSearchTextChange={handleSearchTextChange}
+            searchStatus={searchStatus}
+            handleSearchStatusChange={handleSearchStatusChange}
+            onSearch={handleSearch}
+          />
+        </div>
         <Button
           color={"primary"}
           onClick={() => {
             setIsAddModalOpen(true);
           }}
+          className="w-full md:w-36 "
         >
           {t("Add")} <IconPlus />
         </Button>
@@ -53,16 +92,25 @@ const RoleTable: React.FC<RoleTableProps> = ({ roleList,getRoleList }) => {
               </TableHeadCell>
               <TableHeadCell>{t("Group Name (th)")}</TableHeadCell>
               <TableHeadCell>{t("Group Name (en)")}</TableHeadCell>
-              
+
               <TableHeadCell>{t("Status")}</TableHeadCell>
               {/* <TableHeadCell>{t("Order")}</TableHeadCell> */}
               <TableHeadCell className="flex justify-center whitespace-nowrap">
                 Action
               </TableHeadCell>
             </TableHead>
-            {roleList.length > 0 ? (
+            {loading ? (
+              <TableBody>
+                <TableRow>
+                  <TableCell colSpan={7}>
+                    <div className="flex justify-center items-center py-8">
+                      <Spinner size="xl" color="info" />
+                    </div>
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            ) : roleList.length > 0 ? (
               <>
-                {" "}
                 <TableBody>
                   {roleList.map((item, index) => (
                     <TableRow
@@ -74,7 +122,7 @@ const RoleTable: React.FC<RoleTableProps> = ({ roleList,getRoleList }) => {
                       </TableCell>
                       <TableCell>{item.rl_name_th || "-"}</TableCell>
                       <TableCell>{item.rl_name_en || "-"}</TableCell>
-                     
+
                       <TableCell className="whitespace-nowrap">
                         {item.rl_status == 1 ? (
                           <>
@@ -88,15 +136,14 @@ const RoleTable: React.FC<RoleTableProps> = ({ roleList,getRoleList }) => {
                       </TableCell>
 
                       <TableCell className="flex justify-center items-center whitespace-nowrap ">
-                        {" "}
-                        <div className="flex flex-row gap-4 whitespace-nowrap">
+                        <div className="flex flex-row gap-4">
                           <div className="flex justify-center items-center">
                             <Tooltip content={t("See menu")} style="dark">
                               <IconList
                                 className="cursor-pointer secondary hover:text-primary"
                                 onClick={() => {
-                               setRoleAccessTableModalOpen(true)
-                               setSelectedRole(item)
+                                  setRoleAccessTableModalOpen(true);
+                                  setSelectedRole(item);
                                 }}
                               />
                             </Tooltip>
@@ -133,8 +180,13 @@ const RoleTable: React.FC<RoleTableProps> = ({ roleList,getRoleList }) => {
               <TableBody>
                 <TableRow>
                   <TableCell colSpan={7}>
-                    <div className="flex justify-center ">
-                      <LoadingComponent />
+                    <div className="w-full flex items-center justify-center">
+                      <RushAnimation
+                        loop={false}
+                        animation={emptyAnt}
+                        width="60%"
+                        height="60%"
+                      />
                     </div>
                   </TableCell>
                 </TableRow>
@@ -143,10 +195,39 @@ const RoleTable: React.FC<RoleTableProps> = ({ roleList,getRoleList }) => {
           </Table>
         </div>
       </div>
-      <RoleEditModal isOpen={editRoleModalOpen} setIsOpen={setEditRoleModalOpen} getRoleList={getRoleList} selectedRole={selectedRole}/>
-      <RoleCreateModal isOpen={isAddModalOpen} setIsOpen={setIsAddModalOpen} getRoleList={getRoleList}/>
-      <RoleDeleteModal isOpen={deleteRoleModalOpen} setIsOpen={setDeleteRoleModalOpen} getRoleList={getRoleList} selectedRole={selectedRole} />
-      <RoleMenuAccessTable isOpen={roleAccessTableModalOpen} setIsOpen={setRoleAccessTableModalOpen} getRoleList={getRoleList} selectedRole={selectedRole} />
+      {editRoleModalOpen && (
+        <RoleEditModal
+          isOpen={editRoleModalOpen}
+          setIsOpen={setEditRoleModalOpen}
+          getRoleList={getRoleList}
+          selectedRole={selectedRole}
+        />
+      )}
+      {isAddModalOpen && (
+        <RoleCreateModal
+          isOpen={isAddModalOpen}
+          setIsOpen={setIsAddModalOpen}
+          getRoleList={getRoleList}
+        />
+      )}
+
+      {deleteRoleModalOpen && (
+        <RoleDeleteModal
+          isOpen={deleteRoleModalOpen}
+          setIsOpen={setDeleteRoleModalOpen}
+          getRoleList={getRoleList}
+          selectedRole={selectedRole}
+        />
+      )}
+
+      {roleAccessTableModalOpen && (
+        <RoleMenuAccessTable
+          isOpen={roleAccessTableModalOpen}
+          setIsOpen={setRoleAccessTableModalOpen}
+          getRoleList={getRoleList}
+          selectedRole={selectedRole}
+        />
+      )}
     </>
   );
 };

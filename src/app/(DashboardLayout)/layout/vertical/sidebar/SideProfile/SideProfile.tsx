@@ -11,12 +11,13 @@ import { useRouter } from "next/navigation";
 import { CustomizerContext } from "@/app/context/customizerContext";
 import { jwtDecode } from "jwt-decode";
 import { useTranslation } from "react-i18next";
-import { MessageError } from "@/utils/type/patientTypes";
+import { AppProfileModel, MessageError } from "@/utils/type/patientTypes";
 import ModalError from "../../../shared/modal-error/modalError";
 
 interface TokenPayload {
   exp: number; // Token expiration timestamp (in seconds)
   us_id: string;
+  ap_id: string;
   [key: string]: any; // Other optional claims
 }
 
@@ -39,11 +40,32 @@ const SideProfile = () => {
   const [isClient, setIsClient] = useState(false);
   const router = useRouter();
   const { t } = useTranslation();
-  const { setUserProfile } = useContext(CustomizerContext);
+  const { setUserProfile, isLanguage } = useContext(CustomizerContext);
   const [messageError, setmessageError] = useState<MessageError>({
     isError: false,
     message: "",
   });
+  const [appProfile, setAppProfile] = useState<AppProfileModel>();
+  const [tokenDecode, setTokenDecode] = useState<TokenPayload>();
+
+  const getProfile = async (access_token: string) => {
+    const profile = await axios.get(
+      `${process.env.NEXT_PUBLIC_AUTH_URL}/profile`,
+      {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      }
+    );
+    if (profile.data.status === "success") {
+      setAppProfile(profile.data.data);
+    } else {
+      setmessageError({
+        isError: true,
+        message: profile.data.message,
+      });
+    }
+  };
 
   const apiLogout = async () => {
     try {
@@ -61,10 +83,10 @@ const SideProfile = () => {
         }
       );
       if (response.data.status == "success") {
-        localStorage.removeItem("user");
+        localStorage.removeItem("username");
         localStorage.removeItem("access_token");
         localStorage.removeItem("refresh_token");
-        router.push(`${process.env.NEXT_PUBLIC_LOGIN_URL}/auth/auth1/login`);
+        router.push(`${process.env.NEXT_PUBLIC_LOGIN_URL}/app-menu`);
       }
     } catch (error: any) {
       throw new Error(
@@ -110,14 +132,17 @@ const SideProfile = () => {
 
   useEffect(() => {
     setIsClient(true);
-    let acctk = localStorage.getItem("access_token");
-    if (acctk != null && acctk != "") {
+    let acctk = localStorage.getItem("access_token") || "";
+    if (acctk != "") {
+      const decoded: TokenPayload = jwtDecode(acctk); // Decode the token
+      setTokenDecode(decoded);
       let localUser = localStorage.getItem("user") || "";
       if (localUser == "") {
         getUserData(acctk);
       } else {
         setUser(JSON.parse(localUser));
       }
+      // getProfile(acctk);
     }
   }, []);
   return (
@@ -170,7 +195,7 @@ const SideProfile = () => {
               {profileData.profileDD.map((items, index) => (
                 <Dropdown.Item
                   as={Link}
-                  href="#"
+                  href={items.subtitle}
                   className="px-6 py-3 flex justify-between items-center bg-hover group/link w-full"
                   key={index}
                 >
@@ -187,7 +212,7 @@ const SideProfile = () => {
                     <div className="ps-4 flex justify-between w-full">
                       <div className="w-3/4 ">
                         <h5 className="mb-1 text-sm  group-hover/link:text-primary">
-                          {items.title}
+                          {t(items.title)}
                         </h5>
                         <div className="text-xs  text-darklink">
                           {items.subtitle}
@@ -197,6 +222,38 @@ const SideProfile = () => {
                   </div>
                 </Dropdown.Item>
               ))}
+              {/* {appProfile?.us_apps.map((items, index) => (
+                <Dropdown.Item
+                  as={Link}
+                  href="#"
+                  className={`px-6 py-3 flex justify-between items-center group/link w-full ${
+                    tokenDecode?.ap_id == items.ap_id
+                      ? "bg-lightprimary"
+                      : " bg-hover"
+                  }`}
+                  key={index}
+                >
+                  <div className="flex items-center w-full">
+                    <div
+                      className={`h-11 w-11 flex-shrink-0 rounded-md flex justify-center items-center bg-lightprimary `}
+                    >
+                      <img src={items.ap_logo} alt={items.ap_logo} width={24} />
+                    </div>
+                    <div className="ps-4 flex justify-between w-full">
+                      <div className="w-3/4 ">
+                        <h5 className="mb-1 text-sm  group-hover/link:text-primary">
+                          {isLanguage == "en"
+                            ? items.ap_name_en
+                            : items.ap_name_th}
+                        </h5>
+                        <div className="text-xs  text-darklink">
+                          {items.ap_url}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </Dropdown.Item>
+              ))} */}
             </SimpleBar>
 
             <div className="pt-6 px-6">
